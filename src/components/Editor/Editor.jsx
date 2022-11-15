@@ -1,4 +1,4 @@
-import { Container, Button } from "@mui/material";
+import { Container } from "@mui/material";
 import Split from "react-split";
 import ResponsiveAppBar from "../ResponsiveAppBar/ResponsiveAppBar";
 import "./Editor.css";
