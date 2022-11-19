@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { useSelector } from "react-redux";
 
 import { useResizeDetector } from "react-resize-detector";
 
@@ -21,11 +22,13 @@ const pages = [
   "Contact",
 ];
 
-function ResponsiveAppBar() {
+export const PortfolioAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { width, ref } = useResizeDetector();
+
+  const name = useSelector((state) => state.info.name);
 
   useEffect(() => {
     width >= 900 ? setIsExpanded(true) : setIsExpanded(false);
@@ -41,11 +44,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static" ref={ref}>
-      <Container
-        style={{
-          margin: "0",
-        }}
-      >
+      <Container>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: isExpanded ? "flex" : "none", mr: 1 }} />
           <Typography
@@ -63,7 +62,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            {name}
           </Typography>
           <Box
             sx={{
@@ -123,7 +122,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            {name}
           </Typography>
           <Box
             sx={{
@@ -151,8 +150,6 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
-      <Button variant="contained">{width}</Button>
     </AppBar>
   );
-}
-export default ResponsiveAppBar;
+};

@@ -1,6 +1,6 @@
-import { Container } from "@mui/material";
 import Split from "react-split";
-import ResponsiveAppBar from "../ResponsiveAppBar/ResponsiveAppBar";
+import { PortfolioPage } from "../PotfolioPage";
+import { BuilderPage } from "../BuilderPage";
 import "./Editor.css";
 
 export const Editor = () => {
@@ -12,23 +12,10 @@ export const Editor = () => {
       style={{ height: "100vh" }}
     >
       <div className="pane">
-        <Container
-          style={{
-            margin: "0",
-          }}
-        >
-          <h1>Left Pane</h1>
-        </Container>
+        <BuilderPage />
       </div>
       <div className="pane">
-        <ResponsiveAppBar />
-        <Container
-          style={{
-            paddingTop: "1rem",
-          }}
-        >
-          <h1>Right Pane</h1>
-        </Container>
+        <PortfolioPage />
       </div>
     </Split>
   );

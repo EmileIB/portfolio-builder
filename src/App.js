@@ -10,6 +10,11 @@ import { setName, setAbout, setEmail, setPosition } from "./state/infoSlice";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+    // change bg color to #212121
+    background: {
+      default: "#212121",
+      paper: "#212121",
+    },
   },
 });
 
@@ -22,18 +27,13 @@ const App = () => {
     dispatch(setEmail("johndoe@gmail.com"));
     dispatch(setPosition("Software Engineer"));
     dispatch(setAbout("I am a software engineer"));
+    console.log(info);
   });
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <p>
-        Name: {info.name} <br />
-        Email: {info.email} <br />
-        Position: {info.position} <br />
-        About: {info.about}
-      </p>
-      {/* <Editor /> */}
+      <Editor />
     </ThemeProvider>
   );
 };
