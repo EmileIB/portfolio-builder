@@ -2,18 +2,18 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Editor } from "./components/Editor";
 import { useEffect } from "react";
 
 import { setName, setAbout, setEmail, setPosition } from "./state/infoSlice";
 
+import { routes } from "./routes";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
-    // change bg color to #212121
     background: {
       default: "#212121",
-      paper: "#212121",
     },
   },
 });
@@ -33,7 +33,18 @@ const App = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Editor />
+      <Router>
+        <Routes>
+          {routes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.component}
+            />
+          ))}
+          <Route path="*" element={<div>Not Found</div>} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 };
