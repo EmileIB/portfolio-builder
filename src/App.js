@@ -8,6 +8,7 @@ import { setName, setAbout, setEmail, setPosition } from "./state/infoSlice";
 
 import { routes } from "./routes";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { NotFound } from "./pages/NotFound";
 
 const darkTheme = createTheme({
   palette: {
@@ -42,7 +43,7 @@ const App = () => {
               element={route.component}
             />
           ))}
-          <Route path="*" element={<div>Not Found</div>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </ThemeProvider>

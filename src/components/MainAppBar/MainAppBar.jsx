@@ -18,7 +18,7 @@ import { useState } from "react";
 
 const settings = ["Profile", "Logout"];
 
-export const MainAppBar = ({ height }) => {
+export const MainAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
