@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { PersonalForm } from "../PersonalForm";
 import { EducationForm } from "../EducationForm";
+import { ExperienceForm } from "../ExperienceForm";
 
 export const BuilderPane = () => {
   const Divider = () => {
@@ -26,6 +27,8 @@ export const BuilderPane = () => {
         <PersonalForm />
         <Divider />
         <EducationForm />
+        <Divider />
+        <ExperienceForm />
       </Container>
     </>
   );

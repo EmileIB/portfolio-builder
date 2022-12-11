@@ -17,29 +17,29 @@ import dayjs from "dayjs";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
-  addEducation,
-  removeEducation,
-  editSchool,
-  editDegree,
+  addExperience,
+  removeExperience,
+  editCompany,
+  editPosition,
   editStart,
   editEnd,
   editDescription,
-  setEducation,
-} from "../../state/educationSlice";
+  setExperience,
+} from "../../state/experienceSlice";
 
 import { toast } from "react-toastify";
 
 import { ControlledAccordion } from "../ControlledAccordion";
 import { useCallback } from "react";
 
-export const EducationForm = () => {
-  const education = useSelector((state) => state.education);
+export const ExperienceForm = () => {
+  const experience = useSelector((state) => state.experience);
   const dispatch = useDispatch();
   const [parseAccordionItems, setParseAccordionItems] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newEducation, setNewEducation] = useState({
-    school: "",
-    degree: "",
+  const [newExperience, setNewExperience] = useState({
+    company: "",
+    position: "",
     start: dayjs(),
     end: dayjs(),
     description: "",
@@ -51,25 +51,23 @@ export const EducationForm = () => {
 
   const parseItems = useCallback(() => {
     const items = [];
-    // create an array of objects with the following structure:
-    // { title: "Education", subtitle: "School Name" }
-    education.forEach((item) => {
+    experience.forEach((item) => {
       items.push({
         id: item.id,
-        title: item.school,
+        title: item.company,
         content: (
           <Box>
             <FormControl fullWidth sx={{ mb: 2 }}>
               <TextField
                 id="outlined-basic"
-                label="School Name"
+                label="Company"
                 variant="outlined"
-                value={item.school}
+                value={item.company}
                 onChange={(e) =>
                   dispatch(
-                    editSchool({
+                    editCompany({
                       id: item.id,
-                      school: e.target.value,
+                      company: e.target.value,
                     })
                   )
                 }
@@ -78,14 +76,14 @@ export const EducationForm = () => {
             <FormControl fullWidth sx={{ mb: 2 }}>
               <TextField
                 id="outlined-basic"
-                label="Degree"
+                label="Position"
                 variant="outlined"
-                value={item.degree}
+                value={item.position}
                 onChange={(e) =>
                   dispatch(
-                    editDegree({
+                    editPosition({
                       id: item.id,
-                      degree: e.target.value,
+                      position: e.target.value,
                     })
                   )
                 }
@@ -156,8 +154,8 @@ export const EducationForm = () => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  dispatch(removeEducation(item.id));
-                  toast.success("Education Deleted");
+                  dispatch(removeExperience(item.id));
+                  toast.success("Experience Deleted");
                 }}
               >
                 Delete
@@ -169,20 +167,20 @@ export const EducationForm = () => {
     });
 
     return items;
-  }, [education, dispatch]);
+  }, [experience, dispatch]);
 
-  const addNewEducation = () => {
-    const ed = {
+  const addNewExperience = () => {
+    const ex = {
       id: Math.floor(Math.random() * 100000),
-      school: newEducation.school,
-      degree: newEducation.degree,
-      start: stringifyDate(newEducation.start),
-      end: stringifyDate(newEducation.end),
-      description: newEducation.description,
+      company: newExperience.company,
+      position: newExperience.position,
+      start: stringifyDate(newExperience.start),
+      end: stringifyDate(newExperience.end),
+      description: newExperience.description,
     };
-    console.log(ed);
-    dispatch(addEducation(ed));
-    setNewEducation({});
+    console.log(ex);
+    dispatch(addExperience(ex));
+    setNewExperience({});
     setIsAddModalOpen(false);
   };
 
@@ -194,7 +192,7 @@ export const EducationForm = () => {
   useEffect(() => {
     const serializedState = JSON.parse(localStorage.getItem("state"));
     if (serializedState === null) return;
-    dispatch(setEducation(serializedState.education));
+    dispatch(setExperience(serializedState.experience));
   }, [dispatch]);
 
   return (
@@ -222,10 +220,10 @@ export const EducationForm = () => {
                 fontFamily: "century gothic",
               }}
             >
-              Education
+              Experience
             </Typography>
             <Button onClick={() => setIsAddModalOpen(true)} color="primary">
-              Add Education
+              Add Experience
             </Button>
           </Box>
 
@@ -238,7 +236,7 @@ export const EducationForm = () => {
                 fontFamily: "century gothic",
               }}
             >
-              No Education Added
+              No Experience Added
             </Typography>
           )}
         </Box>
@@ -261,32 +259,34 @@ export const EducationForm = () => {
             p: 4,
           }}
         >
-          <Typography
-            variant="h6"
-            // margin bottom
-            sx={{ mb: 2 }}
-          >
-            Add Education
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Add Experience
           </Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <TextField
               id="outlined-basic"
-              label="School Name"
+              label="Company"
               variant="outlined"
-              value={newEducation.school}
+              value={newExperience.company}
               onChange={(e) =>
-                setNewEducation({ ...newEducation, school: e.target.value })
+                setNewExperience({
+                  ...newExperience,
+                  company: e.target.value,
+                })
               }
             />
           </FormControl>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <TextField
               id="outlined-basic"
-              label="Degree"
+              label="Position"
               variant="outlined"
-              value={newEducation.degree}
+              value={newExperience.position}
               onChange={(e) =>
-                setNewEducation({ ...newEducation, degree: e.target.value })
+                setNewExperience({
+                  ...newExperience,
+                  position: e.target.value,
+                })
               }
             />
           </FormControl>
@@ -304,12 +304,12 @@ export const EducationForm = () => {
                   disableMaskedInput
                   label="Start Date"
                   inputFormat="MM/DD/YYYY"
-                  value={newEducation.startDate}
+                  value={newExperience.startDate}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(newValue) => {
-                    setNewEducation({
-                      ...newEducation,
-                      startDate: stringifyDate(newValue),
+                    setNewExperience({
+                      ...newExperience,
+                      startDate: newValue,
                     });
                   }}
                 />
@@ -321,12 +321,12 @@ export const EducationForm = () => {
                   disableMaskedInput
                   label="End Date"
                   inputFormat="MM/DD/YYYY"
-                  value={newEducation.endDate}
+                  value={newExperience.endDate}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(newValue) => {
-                    setNewEducation({
-                      ...newEducation,
-                      endDate: stringifyDate(newValue),
+                    setNewExperience({
+                      ...newExperience,
+                      endDate: newValue,
                     });
                   }}
                 />
@@ -341,10 +341,10 @@ export const EducationForm = () => {
               variant="outlined"
               multiline
               rows={3}
-              value={newEducation.description}
+              value={newExperience.description}
               onChange={(e) =>
-                setNewEducation({
-                  ...newEducation,
+                setNewExperience({
+                  ...newExperience,
                   description: e.target.value,
                 })
               }
@@ -361,7 +361,7 @@ export const EducationForm = () => {
             </Button>
             <Button
               variant="contained"
-              onClick={addNewEducation}
+              onClick={addNewExperience}
               color="primary"
               sx={{ ml: 2 }}
             >

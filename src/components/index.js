@@ -4,5 +4,14 @@ import { PortfolioAppBar } from "./PortfolioAppBar";
 import { PotfolioPane } from "./PotfolioPane";
 import { PersonalForm } from "./PersonalForm";
 import { ControlledAccordion } from "./ControlledAccordion";
+import { ExperienceForm } from "./ExperienceForm";
 
-export { BuilderPane, MainAppBar, PortfolioAppBar, PotfolioPane, PersonalForm, ControlledAccordion };
+export {
+  BuilderPane,
+  MainAppBar,
+  PortfolioAppBar,
+  PotfolioPane,
+  PersonalForm,
+  ControlledAccordion,
+  ExperienceForm,
+};
