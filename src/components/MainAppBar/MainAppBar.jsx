@@ -11,10 +11,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useCallback } from "react";
+
+import { toast } from "react-toastify";
 
 import { useSelector } from "react-redux";
 
@@ -23,9 +24,6 @@ const settings = ["Profile", "Logout"];
 export const MainAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const [isError, setIsError] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,23 +48,20 @@ export const MainAppBar = () => {
       case "Profile":
         navigate("/profile");
         break;
-      case "Logout":
-        setIsError(true);
-        break;
       default:
-        setIsError(true);
+        break;
     }
     handleCloseUserMenu();
   };
 
   const state = useSelector((state) => state);
-  const handleSave = () => {
-    setIsSaved(true);
-    localStorage.setItem("state", JSON.stringify(state));
-    handleCloseUserMenu();
-  };
 
-  // when control + s is pressed, handleSave is called
+  const handleSave = useCallback(() => {
+    localStorage.setItem("state", JSON.stringify(state));
+    toast.success("Your changes have been saved!");
+    handleCloseUserMenu();
+  }, [state]);
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
@@ -79,9 +74,7 @@ export const MainAppBar = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleSave]);
 
   return (
     <>
@@ -232,33 +225,6 @@ export const MainAppBar = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Snackbar
-        open={isError}
-        autoHideDuration={6000}
-        onClose={() => setIsError(false)}
-      >
-        <Alert
-          onClose={() => setIsError(false)}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          This feature is not available yet
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={isSaved}
-        autoHideDuration={6000}
-        onClose={() => setIsSaved(false)}
-      >
-        <Alert
-          onClose={() => setIsSaved(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Saved successfully!
-        </Alert>
-      </Snackbar>
     </>
   );
 };

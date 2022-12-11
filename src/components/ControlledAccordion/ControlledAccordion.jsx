@@ -5,7 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export const ControlledAccordion = ({ items }) => {
+export const ControlledAccordion = ({ items, title, subtitle }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -27,7 +27,7 @@ export const ControlledAccordion = ({ items }) => {
           >
             <Typography
               sx={{
-                width: "33%",
+                width: "100%",
                 flexShrink: 0,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -36,15 +36,6 @@ export const ControlledAccordion = ({ items }) => {
               }}
             >
               {item.title}
-            </Typography>
-            <Typography
-              sx={{
-                color: "text.secondary",
-                maxHeight: "20px",
-                overflow: "hidden",
-              }}
-            >
-              {item.subtitle}
             </Typography>
           </AccordionSummary>
           <AccordionDetails>{item.content}</AccordionDetails>
