@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import { PortfolioAppBar } from "../PortfolioAppBar";
 
-export const PortfolioPage = () => {
+export const PotfolioPane = () => {
   return (
     <>
       <PortfolioAppBar />

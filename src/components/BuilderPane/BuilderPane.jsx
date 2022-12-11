@@ -1,15 +1,16 @@
 import { Container } from "@mui/material";
 
-export const BuilderPage = () => {
+import { PersonalForm } from "../PersonalForm";
+
+export const BuilderPane = () => {
   return (
     <>
       <Container
         style={{
-          margin: "0",
           paddingTop: "1rem",
         }}
       >
-        <h1>Left Pane</h1>
+        <PersonalForm />
       </Container>
     </>
   );

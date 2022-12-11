@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,6 +15,8 @@ import { Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+
+import { useSelector } from "react-redux";
 
 const settings = ["Profile", "Logout"];
 
@@ -57,11 +59,29 @@ export const MainAppBar = () => {
     handleCloseUserMenu();
   };
 
+  const state = useSelector((state) => state);
   const handleSave = () => {
-    console.log("Save");
     setIsSaved(true);
+    localStorage.setItem("state", JSON.stringify(state));
     handleCloseUserMenu();
   };
+
+  // when control + s is pressed, handleSave is called
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault();
+        console.log("ctrl + s pressed");
+        handleSave();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -78,7 +98,6 @@ export const MainAppBar = () => {
             <Typography
               variant="h6"
               noWrap
-              component="a"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -140,7 +159,6 @@ export const MainAppBar = () => {
             <Typography
               variant="h5"
               noWrap
-              component="a"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },

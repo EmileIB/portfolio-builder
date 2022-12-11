@@ -1,10 +1,5 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useSelector, useDispatch } from "react-redux";
-
-import { useEffect } from "react";
-
-import { setName, setAbout, setEmail, setPosition } from "./state/infoSlice";
 
 import { routes } from "./routes";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -20,17 +15,6 @@ const darkTheme = createTheme({
 });
 
 const App = () => {
-  const info = useSelector((state) => state.info);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setName("John Doe"));
-    dispatch(setEmail("johndoe@gmail.com"));
-    dispatch(setPosition("Software Engineer"));
-    dispatch(setAbout("I am a software engineer"));
-    console.log(info);
-  });
-
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />

@@ -9,8 +9,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { useResizeDetector } from "react-resize-detector";
 
@@ -46,12 +46,9 @@ export const PortfolioAppBar = () => {
     <AppBar position="static" ref={ref}>
       <Container>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: isExpanded ? "flex" : "none", mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
             sx={{
               mr: 2,
               display: isExpanded ? "flex" : "none",
@@ -60,9 +57,14 @@ export const PortfolioAppBar = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              "&:hover": {
+                color: "white",
+              },
             }}
           >
-            {name}
+            <Link style={{ color: "inherit", textDecoration: "none" }}>
+              {name}
+            </Link>
           </Typography>
           <Box
             sx={{
@@ -105,12 +107,10 @@ export const PortfolioAppBar = () => {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: isExpanded ? "none" : "flex", mr: 1 }} />
+
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href=""
             sx={{
               mr: 2,
               display: isExpanded ? "none" : "flex",
@@ -120,9 +120,14 @@ export const PortfolioAppBar = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              "&:hover": {
+                color: "white",
+              },
             }}
           >
-            {name}
+            <Link style={{ color: "inherit", textDecoration: "none" }}>
+              {name}
+            </Link>
           </Typography>
           <Box
             sx={{
