@@ -20,8 +20,6 @@ export const BuilderPane = () => {
       <Container
         style={{
           paddingTop: "1rem",
-          height: "100%",
-          overflow: "auto",
         }}
       >
         <PersonalForm />

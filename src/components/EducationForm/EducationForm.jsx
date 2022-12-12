@@ -138,9 +138,9 @@ export const EducationForm = () => {
                 id="outlined-basic"
                 label="Description"
                 variant="outlined"
-                value={item.description}
                 multiline
                 rows={3}
+                value={item.description}
                 onChange={(e) =>
                   dispatch(
                     editDescription({
