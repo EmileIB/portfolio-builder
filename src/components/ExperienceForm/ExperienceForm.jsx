@@ -32,6 +32,8 @@ import { toast } from "react-toastify";
 import { ControlledAccordion } from "../ControlledAccordion";
 import { useCallback } from "react";
 
+import { formatDescription } from "../../helpers/global-functions";
+
 export const ExperienceForm = () => {
   const experience = useSelector((state) => state.experience);
   const dispatch = useDispatch();
@@ -139,14 +141,17 @@ export const ExperienceForm = () => {
                 value={item.description}
                 multiline
                 rows={3}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const formattedDescription = formatDescription(
+                    e.target.value
+                  );
                   dispatch(
                     editDescription({
                       id: item.id,
-                      description: e.target.value,
+                      description: formattedDescription,
                     })
-                  )
-                }
+                  );
+                }}
               />
             </FormControl>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -342,12 +347,13 @@ export const ExperienceForm = () => {
               multiline
               rows={3}
               value={newExperience.description}
-              onChange={(e) =>
+              onChange={(e) => {
+                const formattedDescription = formatDescription(e.target.value);
                 setNewExperience({
                   ...newExperience,
-                  description: e.target.value,
-                })
-              }
+                  description: formattedDescription,
+                });
+              }}
             />
           </FormControl>
 

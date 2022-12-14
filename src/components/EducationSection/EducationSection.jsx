@@ -2,19 +2,33 @@ import { useSelector } from "react-redux";
 
 import { Box, Typography } from "@mui/material";
 
+import { formatDate } from "../../helpers/global-functions";
+
 export const EducationSection = () => {
   const education = useSelector((state) => state.education);
 
   const EducationItem = ({ item }) => {
     return (
       <Box>
-        <Typography variant="h5" sx={{ fontFamily: "century gothic", mb: 0.5 }}>
-          {item.school}
-        </Typography>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
+            mb: 0.5,
+          }}
+        >
+          <Typography variant="h5" sx={{ fontFamily: "century gothic" }}>
+            {item.school}
+          </Typography>
+          <Typography variant="body1" sx={{ fontFamily: "century gothic" }}>
+            {formatDate(item.start)} - {formatDate(item.end)}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
             alignItems: "center",
             mb: 1,
             padding: "0 1rem",
@@ -22,10 +36,6 @@ export const EducationSection = () => {
         >
           <Typography variant="h6" sx={{ fontFamily: "century gothic" }}>
             {item.degree}
-          </Typography>
-
-          <Typography variant="body1" sx={{ fontFamily: "century gothic" }}>
-            {item.start} - {item.end}
           </Typography>
         </Box>
         <Typography

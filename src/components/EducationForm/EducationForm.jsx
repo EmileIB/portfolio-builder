@@ -32,6 +32,8 @@ import { toast } from "react-toastify";
 import { ControlledAccordion } from "../ControlledAccordion";
 import { useCallback } from "react";
 
+import { formatDescription } from "../../helpers/global-functions";
+
 export const EducationForm = () => {
   const education = useSelector((state) => state.education);
   const dispatch = useDispatch();
@@ -141,14 +143,17 @@ export const EducationForm = () => {
                 multiline
                 rows={3}
                 value={item.description}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const formattedDescription = formatDescription(
+                    e.target.value
+                  );
                   dispatch(
                     editDescription({
                       id: item.id,
-                      description: e.target.value,
+                      description: formattedDescription,
                     })
-                  )
-                }
+                  );
+                }}
               />
             </FormControl>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -342,12 +347,13 @@ export const EducationForm = () => {
               multiline
               rows={3}
               value={newEducation.description}
-              onChange={(e) =>
+              onChange={(e) => {
+                const formattedDescription = formatDescription(e.target.value);
                 setNewEducation({
                   ...newEducation,
-                  description: e.target.value,
-                })
-              }
+                  description: formattedDescription,
+                });
+              }}
             />
           </FormControl>
 
