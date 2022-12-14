@@ -3,6 +3,7 @@ import { PortfolioAppBar } from "../PortfolioAppBar";
 
 import { PersonalSection } from "../PersonalSection";
 import { EducationSection } from "../EducationSection";
+import { ExperienceSection } from "../ExperienceSection";
 
 export const PotfolioPane = () => {
   const Devider = () => {
@@ -28,6 +29,8 @@ export const PotfolioPane = () => {
         <PersonalSection />
         <Devider />
         <EducationSection />
+        <Devider />
+        <ExperienceSection />
       </Container>
     </>
   );
