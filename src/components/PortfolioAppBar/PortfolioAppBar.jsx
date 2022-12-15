@@ -14,13 +14,7 @@ import { Link } from "react-router-dom";
 
 import { useResizeDetector } from "react-resize-detector";
 
-const pages = [
-  "About Me",
-  "Education",
-  "Work Experience",
-  "Projects",
-  "Contact",
-];
+const pages = ["About Me", "Education", "Work Experience", "Projects"];
 
 export const PortfolioAppBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);

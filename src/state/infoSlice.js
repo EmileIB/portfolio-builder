@@ -5,6 +5,15 @@ const initialState = {
   email: "",
   position: "",
   about: "",
+  media: {
+    github: "",
+    linkedin: "",
+    twitter: "",
+    facebook: "",
+    instagram: "",
+    youtube: "",
+    website: "",
+  },
 };
 
 const infoSlice = createSlice({
@@ -23,9 +32,23 @@ const infoSlice = createSlice({
     setAbout: (state, action) => {
       state.about = action.payload;
     },
+    setMediaType: (state, action) => {
+      console.log(action.payload);
+      state.media[action.payload.type] = action.payload.value;
+    },
+    setMedia: (state, action) => {
+      state.media = action.payload;
+    },
   },
 });
 
-export const { setName, setEmail, setPosition, setAbout } = infoSlice.actions;
+export const {
+  setName,
+  setEmail,
+  setPosition,
+  setAbout,
+  setMedia,
+  setMediaType,
+} = infoSlice.actions;
 
 export default infoSlice.reducer;

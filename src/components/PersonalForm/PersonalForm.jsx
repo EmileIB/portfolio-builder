@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Box, Card, TextField, Typography, FormControl } from "@mui/material";
+import { MultipleSelectChip } from "../MultipleSelectChip";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -8,11 +9,29 @@ import {
   setAbout,
   setEmail,
   setPosition,
+  setMedia,
+  setMediaType,
 } from "../../state/infoSlice";
 
 export const PersonalForm = () => {
   const info = useSelector((state) => state.info);
   const dispatch = useDispatch();
+
+  const mediaTypes = [
+    "github",
+    "linkedin",
+    "twitter",
+    "facebook",
+    "instagram",
+    "youtube",
+    "website",
+  ];
+
+  const [selectedMedia, setSelectedMedia] = useState([]);
+
+  const onSelectChange = (e) => {
+    setSelectedMedia(e.target.value);
+  };
 
   // on reload, get state from local storage
   useEffect(() => {
@@ -23,6 +42,15 @@ export const PersonalForm = () => {
     dispatch(setEmail(state.info.email));
     dispatch(setPosition(state.info.position));
     dispatch(setAbout(state.info.about));
+    dispatch(setMedia(state.info.media));
+
+    const selectedMedia = Object.keys(state.info.media).filter((media) => {
+      return state.info.media[media] !== "";
+    });
+
+    setSelectedMedia(selectedMedia);
+
+    console.log(selectedMedia);
   }, [dispatch]);
 
   return (
@@ -83,6 +111,24 @@ export const PersonalForm = () => {
             onChange={(e) => dispatch(setAbout(e.target.value))}
           />
         </FormControl>
+        <MultipleSelectChip
+          items={mediaTypes}
+          onChange={onSelectChange}
+          initialValue={selectedMedia}
+        />
+        {selectedMedia.map((item) => (
+          <FormControl fullWidth sx={{ mb: 2 }} key={item}>
+            <TextField
+              id="outlined-basic"
+              label={item.charAt(0).toUpperCase() + item.slice(1)}
+              variant="outlined"
+              value={info.media[item]}
+              onChange={(e) =>
+                dispatch(setMediaType({ type: item, value: e.target.value }))
+              }
+            />
+          </FormControl>
+        ))}
       </Box>
     </Card>
   );
