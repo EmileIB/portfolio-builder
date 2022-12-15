@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [];
 
-const projectSlice = createSlice({
-  name: "project",
+const projectsSlice = createSlice({
+  name: "projects",
   initialState,
   reducers: {
     addProject: (state, action) => {
@@ -46,6 +46,6 @@ export const {
   editDescription,
   editLink,
   setProject,
-} = projectSlice.actions;
+} = projectsSlice.actions;
 
-export default projectSlice.reducer;
+export default projectsSlice.reducer;

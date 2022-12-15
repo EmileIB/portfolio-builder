@@ -144,8 +144,8 @@ export const MainAppBar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                <MenuItem key={"Save (ctrl + s)"} onClick={handleSave}>
-                  <Typography textAlign="center">Save (ctrl + s)</Typography>
+                <MenuItem key={"Save Changes"} onClick={handleSave}>
+                  <Typography textAlign="center">Save Changes</Typography>
                 </MenuItem>
               </Menu>
             </Box>

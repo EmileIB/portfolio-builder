@@ -5,6 +5,7 @@ import { PotfolioPane } from "./PortfolioPane";
 import { PersonalForm } from "./PersonalForm";
 import { ControlledAccordion } from "./ControlledAccordion";
 import { ExperienceForm } from "./ExperienceForm";
+import { ProjectsForm } from "./ProjectsForm";
 
 export {
   BuilderPane,
@@ -14,4 +15,5 @@ export {
   PersonalForm,
   ControlledAccordion,
   ExperienceForm,
+  ProjectsForm,
 };
