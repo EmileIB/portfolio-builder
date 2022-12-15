@@ -43,7 +43,7 @@ export const BuilderPane = () => {
             variant="contained"
             color="primary"
             style={{
-              width: "100%",
+              width: "50%",
               fontWeight: "bold",
             }}
           >
