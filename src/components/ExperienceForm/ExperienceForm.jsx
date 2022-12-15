@@ -183,7 +183,6 @@ export const ExperienceForm = () => {
       end: stringifyDate(newExperience.end),
       description: newExperience.description,
     };
-    console.log(ex);
     dispatch(addExperience(ex));
     setNewExperience({});
     setIsAddModalOpen(false);

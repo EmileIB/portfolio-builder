@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import { PersonalForm } from "../PersonalForm";
 import { EducationForm } from "../EducationForm";
 import { ExperienceForm } from "../ExperienceForm";
@@ -30,6 +30,26 @@ export const BuilderPane = () => {
         <ExperienceForm />
         <Divider />
         <ProjectsForm />
+        <Divider />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            style={{
+              width: "100%",
+              fontWeight: "bold",
+            }}
+          >
+            Upload Resume
+          </Button>
+        </div>
       </Container>
     </>
   );

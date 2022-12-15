@@ -185,7 +185,6 @@ export const EducationForm = () => {
       end: stringifyDate(newEducation.end),
       description: newEducation.description,
     };
-    console.log(ed);
     dispatch(addEducation(ed));
     setNewEducation({});
     setIsAddModalOpen(false);

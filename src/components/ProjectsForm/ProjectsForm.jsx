@@ -30,8 +30,6 @@ import {
 
 export const ProjectsForm = () => {
   const projects = useSelector((state) => state.projects);
-  const state = useSelector((state) => state);
-  console.log(state);
   const dispatch = useDispatch();
   const [parseAccordionItems, setParseAccordionItems] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -88,7 +86,10 @@ export const ProjectsForm = () => {
                 </FormControl>
               </Tooltip>
 
-              <Tooltip title="eg: https://imgur.com/Gb1pZUW" followCursor>
+              <Tooltip
+                title="eg: https://i.imgur.com/Gb1pZUW.jpeg"
+                followCursor
+              >
                 <FormControl sx={{ width: "49%" }}>
                   <TextField
                     id="outlined-basic"
@@ -153,7 +154,6 @@ export const ProjectsForm = () => {
       link: newProject.link,
       image: newProject.image,
     };
-    console.log(ed);
     dispatch(addProject(ed));
     setNewProject({});
     setIsAddModalOpen(false);
@@ -234,12 +234,8 @@ export const ProjectsForm = () => {
             p: 4,
           }}
         >
-          <Typography
-            variant="h6"
-            // margin bottom
-            sx={{ mb: 2 }}
-          >
-            Add Education
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Add Project
           </Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <TextField
@@ -273,7 +269,7 @@ export const ProjectsForm = () => {
                 />
               </FormControl>
             </Tooltip>
-            <Tooltip title="eg: https://imgur.com/Gb1pZUW" followCursor>
+            <Tooltip title="eg: https://i.imgur.com/Gb1pZUW.jpeg" followCursor>
               <FormControl sx={{ width: "49%" }}>
                 <TextField
                   id="outlined-basic"

@@ -43,7 +43,6 @@ export const MainAppBar = () => {
   };
 
   const handleSettingClick = (event) => {
-    console.log(event.target.innerText);
     switch (event.target.innerText) {
       case "Profile":
         navigate("/profile");
@@ -66,7 +65,6 @@ export const MainAppBar = () => {
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "s") {
         event.preventDefault();
-        console.log("ctrl + s pressed");
         handleSave();
       }
     };
