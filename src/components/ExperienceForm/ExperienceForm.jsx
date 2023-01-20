@@ -140,6 +140,7 @@ export const ExperienceForm = () => {
                 variant="outlined"
                 value={item.description}
                 multiline
+                fullWidth
                 rows={3}
                 onChange={(e) => {
                   const formattedDescription = formatDescription(
@@ -344,6 +345,7 @@ export const ExperienceForm = () => {
               label="Description"
               variant="outlined"
               multiline
+              fullWidth
               rows={3}
               value={newExperience.description}
               onChange={(e) => {

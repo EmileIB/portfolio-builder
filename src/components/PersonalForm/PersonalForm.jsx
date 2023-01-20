@@ -105,8 +105,9 @@ export const PersonalForm = () => {
             id="outlined-basic"
             label="About Me"
             variant="outlined"
-            multiline
-            rows={4}
+            multiline={true}
+            fullWidth
+            rows={5}
             value={info.about}
             onChange={(e) => dispatch(setAbout(e.target.value))}
           />

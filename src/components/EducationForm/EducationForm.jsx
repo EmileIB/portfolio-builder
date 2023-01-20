@@ -141,6 +141,7 @@ export const EducationForm = () => {
                 label="Description"
                 variant="outlined"
                 multiline
+                fullWidth
                 rows={3}
                 value={item.description}
                 onChange={(e) => {
@@ -344,6 +345,7 @@ export const EducationForm = () => {
               label="Description"
               variant="outlined"
               multiline
+              fullWidth
               rows={3}
               value={newEducation.description}
               onChange={(e) => {

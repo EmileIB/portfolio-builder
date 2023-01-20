@@ -114,6 +114,7 @@ export const ProjectsForm = () => {
                 label="Description"
                 variant="outlined"
                 multiline
+                fullWidth
                 rows={3}
                 value={item.description}
                 onChange={(e) =>
@@ -290,6 +291,7 @@ export const ProjectsForm = () => {
               label="Description"
               variant="outlined"
               multiline
+              fullWidth
               rows={3}
               value={newProject.description}
               onChange={(e) => {
