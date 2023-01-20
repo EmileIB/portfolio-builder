@@ -12,7 +12,7 @@ import { Grid } from "@mui/material";
 
 import { useState, useRef } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -26,6 +26,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../state/userSlice";
 
 export const Register = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [imgSrc, setImgSrc] = useState("");
   const [image, setImage] = useState(null);
@@ -93,6 +94,7 @@ export const Register = () => {
               },
             })
           );
+          navigate("/editor");
         } else {
           toast.error("Error Registering User! Please try again later.");
         }
