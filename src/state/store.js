@@ -3,6 +3,7 @@ import infoReducer from "./infoSlice";
 import educationReducer from "./educationSlice";
 import experienceReducer from "./experienceSlice";
 import projectsReducer from "./projectSlice";
+import userReducer from "./userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     education: educationReducer,
     experience: experienceReducer,
     projects: projectsReducer,
+    user: userReducer,
   },
 });

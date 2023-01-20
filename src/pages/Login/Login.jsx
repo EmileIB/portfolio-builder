@@ -2,9 +2,6 @@ import { Container } from "@mui/system";
 import { Box } from "@mui/system";
 import {
   Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
   TextField,
   Typography,
   InputAdornment,
@@ -17,33 +14,70 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { useState } from "react";
 
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+import { login } from "../../utils/user-helper";
+import { toast } from "react-toastify";
+
+import { useDispatch } from "react-redux";
+import { setUser } from "../../state/userSlice";
+
 export const Login = () => {
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-    showPassword: false,
-  });
+  const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
   const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
-  const handleClick = () => {
-    navigate("/editor");
-  };
+  const emailRegex = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/;
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .matches(emailRegex, "Invalid email address")
+        .required("Required"),
+      password: Yup.string().required("Required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        const res = await login(values.email, values.password);
+        if (res.success) {
+          toast.success("Login Successful");
+          localStorage.setItem("token", res.data.token);
+          dispatch(
+            setUser({
+              isSignedIn: true,
+              email: res.data.user.email,
+              firstName: res.data.user.firstName,
+              lastName: res.data.user.lastName,
+              profilePic: {
+                name: res.data.user.profilePic.name,
+                displayName: res.data.user.profilePic.displayName,
+              },
+            })
+          );
+          navigate("/editor");
+        } else {
+          toast.error(res.message);
+          formik.setFieldError("email", "Invalid Credentials");
+          formik.setFieldError("password", "Invalid Credentials");
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    },
+  });
 
   return (
     <Container maxWidth="xl">
@@ -71,15 +105,27 @@ export const Login = () => {
             label="Email"
             variant="outlined"
             sx={{ width: "100%", mb: 2 }}
+            value={formik.values.email}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            onBlur={formik.handleBlur}
+            helperText={formik.touched.email && formik.errors.email}
+            onChange={(e) => {
+              formik.setFieldValue("email", e.target.value);
+            }}
           />
-          <FormControl sx={{ width: "100%", mb: 2 }} variant="outlined">
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <OutlinedInput
-              id="password"
-              type={values.showPassword ? "text" : "password"}
-              value={values.password}
-              onChange={handleChange("password")}
-              endAdornment={
+          <TextField
+            label="Password"
+            sx={{ width: "100%", mb: 2 }}
+            type={showPassword ? "text" : "password"}
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            onChange={(e) => {
+              formik.setFieldValue("password", e.target.value);
+            }}
+            onBlur={formik.handleBlur}
+            helperText={formik.touched.password && formik.errors.password}
+            InputProps={{
+              endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
@@ -87,13 +133,12 @@ export const Login = () => {
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
+              ),
+            }}
+          />
           <Button
             variant="contained"
             sx={{
@@ -105,7 +150,7 @@ export const Login = () => {
               mb: 2,
             }}
             color="primary"
-            onClick={handleClick}
+            onClick={formik.handleSubmit}
           >
             Login
           </Button>

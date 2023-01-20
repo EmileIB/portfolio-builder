@@ -8,6 +8,11 @@ import { NotFound } from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { useDispatch } from "react-redux";
+import { setUser } from "./state/userSlice";
+import { auth } from "./utils/user-helper";
+import { useEffect } from "react";
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -18,6 +23,29 @@ const darkTheme = createTheme({
 });
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    auth().then((response) => {
+      if (response.success) {
+        dispatch(
+          setUser({
+            isSignedIn: true,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            email: response.data.email,
+            phone: response.data.phone,
+            profilePic: {
+              name: response.data.profilePic?.name,
+              displayName: response.data.profilePic?.displayName,
+            },
+          })
+        );
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <ThemeProvider theme={darkTheme}>

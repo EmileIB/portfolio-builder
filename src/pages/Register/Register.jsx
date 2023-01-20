@@ -2,9 +2,6 @@ import { Container } from "@mui/system";
 import { Box } from "@mui/system";
 import {
   Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
   TextField,
   Typography,
   InputAdornment,
@@ -13,48 +10,106 @@ import {
 import { Avatar } from "@mui/material";
 import { Grid } from "@mui/material";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+import { uploadImage } from "../../utils/image-helper";
+import { toast } from "react-toastify";
+
+import { register } from "../../utils/user-helper";
+
+import { useDispatch } from "react-redux";
+import { setUser } from "../../state/userSlice";
+
 export const Register = () => {
-  const [src, setSrc] = useState("");
+  const dispatch = useDispatch();
+  const [imgSrc, setImgSrc] = useState("");
+  const [image, setImage] = useState(null);
 
-  const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    phone: "",
-    confirmPassword: "",
-    showPassword: false,
-    showConfirmPassword: false,
+  const fileInputRef = useRef(null);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const emailRegex = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/;
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      phone: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
+      email: Yup.string()
+        .matches(emailRegex, "Invalid email address")
+        .required("Required"),
+      password: Yup.string()
+        .oneOf([Yup.ref("confirmPassword"), null], "Passwords must match")
+        .required("Required"),
+      phone: Yup.string().required("Required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Required"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        let imgId = null;
+        if (image) {
+          const res = await uploadImage(image);
+          if (res.success) {
+            imgId = res.data[0]._id;
+          } else {
+            toast.error("Error Uploading Image! Pleae try again later.");
+            return;
+          }
+        }
+        const res = await register({
+          ...values,
+          profilePic: imgId,
+        });
+
+        if (res.success) {
+          toast.success("Registration Successful");
+          formik.resetForm();
+          localStorage.setItem("token", res.data.token);
+          dispatch(
+            setUser({
+              isSignedIn: true,
+              firstName: res.data.user.firstName,
+              lastName: res.data.user.lastName,
+              email: res.data.user.email,
+              phone: res.data.user.phone,
+              profilePic: {
+                name: res.data.user.profilePic?.name,
+                displayName: res.data.user.profilePic?.displayName,
+              },
+            })
+          );
+        } else {
+          toast.error("Error Registering User! Please try again later.");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Error Registering User! Please try again later.");
+      }
+    },
+    onReset: () => {
+      setImgSrc("");
+      setImage(null);
+      fileInputRef.current.value = "";
+    },
   });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleClickShowConfirmPassword = () => {
-    setValues({
-      ...values,
-      showConfirmPassword: !values.showConfirmPassword,
-    });
-  };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
-  };
-
-  const handleClick = () => {
-    console.log(values);
   };
 
   return (
@@ -94,7 +149,7 @@ export const Register = () => {
             >
               <div>
                 <Avatar
-                  src={src}
+                  src={imgSrc}
                   sx={{
                     width: { xs: 200, md: 300 },
                     height: { xs: 200, md: 300 },
@@ -103,17 +158,32 @@ export const Register = () => {
                     },
                     mt: { xs: 3, md: 6 },
                   }}
-                  onClick={() => document.getElementById("file").click()}
+                  onClick={() => fileInputRef.current.click()}
                 />
                 <input
                   type="file"
                   id="file"
                   style={{ display: "none" }}
                   onChange={(e) => {
-                    setSrc(URL.createObjectURL(e.target.files[0]));
+                    setImage(e.target.files[0]);
+                    setImgSrc(URL.createObjectURL(e.target.files[0]));
                   }}
+                  ref={fileInputRef}
                 />
-                {!src && (
+                {imgSrc ? (
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ mt: 2, mx: "auto", display: "block" }}
+                    onClick={() => {
+                      setImgSrc("");
+                      setImage(null);
+                      fileInputRef.current.value = "";
+                    }}
+                  >
+                    Remove
+                  </Button>
+                ) : (
                   <label htmlFor="file" style={{ width: "100%" }}>
                     <Typography
                       variant="h6"
@@ -129,16 +199,6 @@ export const Register = () => {
                       Upload
                     </Typography>
                   </label>
-                )}
-                {src && (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    sx={{ mt: 2, mx: "auto", display: "block" }}
-                    onClick={() => setSrc("")}
-                  >
-                    Remove
-                  </Button>
                 )}
               </div>
             </Grid>
@@ -160,8 +220,17 @@ export const Register = () => {
                   type="text"
                   variant="outlined"
                   sx={{ width: "49%" }}
-                  value={values.firstName}
-                  onChange={handleChange("firstName")}
+                  value={formik.values.firstName}
+                  onChange={(e) => {
+                    formik.setFieldValue("firstName", e.target.value);
+                  }}
+                  error={
+                    formik.touched.firstName && Boolean(formik.errors.firstName)
+                  }
+                  helperText={
+                    formik.touched.firstName && formik.errors.firstName
+                  }
+                  onBlur={formik.handleBlur}
                 />
                 {/* last name */}
                 <TextField
@@ -170,8 +239,15 @@ export const Register = () => {
                   type="text"
                   variant="outlined"
                   sx={{ width: "49%" }}
-                  value={values.lastName}
-                  onChange={handleChange("lastName")}
+                  value={formik.values.lastName}
+                  onChange={(e) => {
+                    formik.setFieldValue("lastName", e.target.value);
+                  }}
+                  error={
+                    formik.touched.lastName && Boolean(formik.errors.lastName)
+                  }
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+                  onBlur={formik.handleBlur}
                 />
               </Box>
               {/* email */}
@@ -181,8 +257,13 @@ export const Register = () => {
                 type="email"
                 variant="outlined"
                 sx={{ width: "100%", mb: 2 }}
-                value={values.email}
-                onChange={handleChange("email")}
+                value={formik.values.email}
+                onChange={(e) => {
+                  formik.setFieldValue("email", e.target.value);
+                }}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                onBlur={formik.handleBlur}
               />
               {/* phone */}
               <TextField
@@ -191,63 +272,84 @@ export const Register = () => {
                 variant="outlined"
                 type="text"
                 sx={{ width: "100%", mb: 2 }}
-                value={values.phone}
-                onChange={handleChange("phone")}
+                value={formik.values.phone}
+                onChange={(e) => {
+                  formik.setFieldValue("phone", e.target.value);
+                }}
+                error={formik.touched.phone && Boolean(formik.errors.phone)}
+                helperText={formik.touched.phone && formik.errors.phone}
+                onBlur={formik.handleBlur}
               />
               {/* password */}
-              <FormControl sx={{ width: "100%", mb: 2 }} variant="outlined">
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <OutlinedInput
-                  id="password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  endAdornment={
+              <TextField
+                id="password"
+                type={showPassword ? "text" : "password"}
+                sx={{ width: "100%", mb: 2 }}
+                value={formik.values.password}
+                onChange={(e) => {
+                  formik.setFieldValue("password", e.target.value);
+                }}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                onBlur={formik.handleBlur}
+                InputProps={{
+                  endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
+                        onClick={() => setShowPassword(!showPassword)}
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
-                  }
-                  label="Password"
-                />
-              </FormControl>
+                  ),
+                }}
+                label="Password"
+              />
               {/* confirm password */}
-              <FormControl sx={{ width: "100%", mb: 2 }} variant="outlined">
-                <InputLabel htmlFor="confirm-password">Password</InputLabel>
-                <OutlinedInput
-                  id="confirm-password"
-                  type={values.showConfirmPassword ? "text" : "password"}
-                  value={values.confirmPassword}
-                  onChange={handleChange("confirmPassword")}
-                  endAdornment={
+              <TextField
+                id="password"
+                type={showConfirmPassword ? "text" : "password"}
+                sx={{ width: "100%", mb: 2 }}
+                value={formik.values.confirmPassword}
+                onChange={(e) => {
+                  formik.setFieldValue("confirmPassword", e.target.value);
+                }}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
+                onBlur={formik.handleBlur}
+                InputProps={{
+                  endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowConfirmPassword}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {values.showConfirmPassword ? (
+                        {showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
                           <Visibility />
                         )}
                       </IconButton>
                     </InputAdornment>
-                  }
-                  label="Confirm Password"
-                />
-              </FormControl>
+                  ),
+                }}
+                label="Password"
+              />
               <Button
                 variant="contained"
                 sx={{
@@ -258,7 +360,7 @@ export const Register = () => {
                   fontFamily: "monospace",
                   mb: 2,
                 }}
-                onClick={handleClick}
+                onClick={formik.handleSubmit}
               >
                 Sign Up
               </Button>

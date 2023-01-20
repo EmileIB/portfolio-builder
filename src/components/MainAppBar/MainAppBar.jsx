@@ -54,6 +54,7 @@ export const MainAppBar = () => {
   };
 
   const state = useSelector((state) => state);
+  const user = useSelector((state) => state.user);
 
   const handleSave = useCallback(() => {
     localStorage.setItem("state", JSON.stringify(state));
@@ -192,11 +193,27 @@ export const MainAppBar = () => {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt={"Emile Ibrahim"}>E</Avatar>
-                </IconButton>
-              </Tooltip>
+              {user.isSignedIn ? (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt={"Emile Ibrahim"}>E</Avatar>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Button
+                  key={"Sign In"}
+                  onClick={() => navigate("/login")}
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    textTransform: "none",
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  Sign In
+                </Button>
+              )}
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
