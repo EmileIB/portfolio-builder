@@ -3,12 +3,14 @@ import Split from "react-split";
 import { useResizeDetector } from "react-resize-detector";
 
 import { PotfolioPane, MainAppBar, BuilderPane } from "../../components";
+import { useSelector } from "react-redux";
 
-import { Button, Box } from "@mui/material";
+import { Button, Box, CircularProgress } from "@mui/material";
 
 import "./Editor.css";
 
 export const Editor = () => {
+  const user = useSelector((state) => state.user);
   const appBarHeight = "65px";
 
   const { width, ref } = useResizeDetector();
@@ -26,7 +28,20 @@ export const Editor = () => {
   return (
     <div ref={ref}>
       <MainAppBar />
-      {isSmallScreen ? (
+      {user.isSignedIn && user.isLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
+          }}
+        >
+          <CircularProgress // make it bigger
+            size={50}
+          />
+        </Box>
+      ) : isSmallScreen ? (
         <>
           <Box
             variant="contained"

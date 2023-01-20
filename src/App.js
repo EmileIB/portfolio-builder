@@ -8,10 +8,12 @@ import { NotFound } from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./state/userSlice";
 import { auth } from "./utils/user-helper";
 import { useEffect } from "react";
+import { setLoading } from "./state/userSlice";
+import { LinearProgress, Stack } from "@mui/material";
 
 const darkTheme = createTheme({
   palette: {
@@ -23,9 +25,11 @@ const darkTheme = createTheme({
 });
 
 const App = () => {
+  const isLoading = useSelector((state) => state.global.isLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setLoading(true));
     auth().then((response) => {
       if (response.success) {
         dispatch(
@@ -50,6 +54,11 @@ const App = () => {
     <>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
+        {isLoading && (
+          <Stack sx={{ width: "100%", color: "white" }} spacing={2}>
+            <LinearProgress color="inherit" />
+          </Stack>
+        )}
         <Router>
           <Routes>
             {routes.map((route) => (

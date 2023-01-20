@@ -47,6 +47,10 @@ export const MainAppBar = () => {
       case "Profile":
         navigate("/profile");
         break;
+      case "Logout":
+        localStorage.removeItem("token");
+        navigate("/login");
+        break;
       default:
         break;
     }

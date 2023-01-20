@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isSignedIn: false,
+  isLoading: false,
   firstName: "",
   lastName: "",
   email: "",
@@ -34,7 +35,11 @@ const userSlice = createSlice({
     setProfilePic: (state, action) => {
       state.profilePic = action.payload;
     },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
     setUser: (state, action) => {
+      action.payload.isLoading = false;
       return action.payload;
     },
   },
@@ -47,6 +52,8 @@ export const {
   setPhone,
   setProfilePic,
   setUser,
+  setSignedIn,
+  setLoading,
 } = userSlice.actions;
 
 export default userSlice.reducer;
