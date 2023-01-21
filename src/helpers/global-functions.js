@@ -1,6 +1,7 @@
-// function to transform DD/MM/YYYY to MM/YYYY
 export const formatDate = (date) => {
-  const [month, , year] = date.split("/");
+  const parsedDate = new Date(date);
+  const month = parsedDate.getMonth() + 1;
+  const year = parsedDate.getFullYear();
   return `${month}/${year}`;
 };
 
