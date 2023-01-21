@@ -37,9 +37,7 @@ export const Editor = () => {
             height: "50vh",
           }}
         >
-          <CircularProgress // make it bigger
-            size={50}
-          />
+          <CircularProgress size={50} />
         </Box>
       ) : isSmallScreen ? (
         <>

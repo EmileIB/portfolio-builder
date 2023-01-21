@@ -49,7 +49,7 @@ export const MainAppBar = () => {
         break;
       case "Logout":
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/");
         break;
       default:
         break;
