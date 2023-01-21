@@ -10,6 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./state/userSlice";
+
+import { setEducation } from "./state/educationSlice";
+import { setExperience } from "./state/experienceSlice";
+import { setProject } from "./state/projectSlice";
+import { parseUser } from "./helpers/global-functions";
+import { setInfo } from "./state/infoSlice";
+
 import { auth } from "./utils/user-helper";
 import { useEffect } from "react";
 import { setLoading } from "./state/userSlice";
@@ -32,19 +39,14 @@ const App = () => {
     dispatch(setLoading(true));
     auth().then((response) => {
       if (response.success) {
-        dispatch(
-          setUser({
-            isSignedIn: true,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            email: response.data.email,
-            phone: response.data.phone,
-            profilePic: {
-              name: response.data.profilePic?.name,
-              displayName: response.data.profilePic?.displayName,
-            },
-          })
-        );
+        const parsedUser = parseUser(response.data);
+        dispatch(setUser(parsedUser.user));
+        dispatch(setEducation(parsedUser.educations));
+        dispatch(setExperience(parsedUser.experiences));
+        dispatch(setProject(parsedUser.projects));
+        dispatch(setInfo(parsedUser.info));
+      } else {
+        dispatch(setLoading(false));
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -30,6 +30,7 @@ import {
 
 export const ProjectsForm = () => {
   const projects = useSelector((state) => state.projects);
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const dispatch = useDispatch();
   const [parseAccordionItems, setParseAccordionItems] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -44,7 +45,7 @@ export const ProjectsForm = () => {
     const items = [];
     projects.forEach((item) => {
       items.push({
-        id: item.id,
+        id: item._id,
         title: item.title,
         content: (
           <Box>
@@ -57,7 +58,7 @@ export const ProjectsForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editTitle({
-                      id: item.id,
+                      _id: item._id,
                       title: e.target.value,
                     })
                   )
@@ -77,7 +78,7 @@ export const ProjectsForm = () => {
                     onChange={(e) =>
                       dispatch(
                         editLink({
-                          id: item.id,
+                          _id: item._id,
                           link: e.target.value,
                         })
                       )
@@ -99,7 +100,7 @@ export const ProjectsForm = () => {
                     onChange={(e) =>
                       dispatch(
                         editImage({
-                          id: item.id,
+                          _id: item._id,
                           image: e.target.value,
                         })
                       )
@@ -120,7 +121,7 @@ export const ProjectsForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editDescription({
-                      id: item.id,
+                      _id: item._id,
                       description: e.target.value,
                     })
                   )
@@ -132,7 +133,7 @@ export const ProjectsForm = () => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  dispatch(removeProject(item.id));
+                  dispatch(removeProject(item._id));
                   toast.success("Project Deleted");
                 }}
               >
@@ -149,7 +150,7 @@ export const ProjectsForm = () => {
 
   const addNewEducation = () => {
     const ed = {
-      id: Math.floor(Math.random() * 100000),
+      _id: Math.floor(Math.random() * 100000),
       title: newProject.title,
       description: newProject.description,
       link: newProject.link,
@@ -164,12 +165,13 @@ export const ProjectsForm = () => {
     setParseAccordionItems(parseItems());
   }, [parseItems]);
 
-  // on reload, get state from local storage
   useEffect(() => {
+    if (isSignedIn) return;
     const serializedState = JSON.parse(localStorage.getItem("state"));
     if (serializedState === null) return;
     dispatch(setProject(serializedState.projects));
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

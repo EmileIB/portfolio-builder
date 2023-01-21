@@ -33,11 +33,13 @@ const infoSlice = createSlice({
       state.about = action.payload;
     },
     setMediaType: (state, action) => {
-      console.log(action.payload);
       state.media[action.payload.type] = action.payload.value;
     },
     setMedia: (state, action) => {
       state.media = action.payload;
+    },
+    setInfo: (state, action) => {
+      return action.payload;
     },
   },
 });
@@ -49,6 +51,7 @@ export const {
   setAbout,
   setMedia,
   setMediaType,
+  setInfo,
 } = infoSlice.actions;
 
 export default infoSlice.reducer;

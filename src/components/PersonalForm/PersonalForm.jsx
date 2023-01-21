@@ -15,6 +15,7 @@ import {
 
 export const PersonalForm = () => {
   const info = useSelector((state) => state.info);
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const dispatch = useDispatch();
 
   const mediaTypes = [
@@ -31,10 +32,25 @@ export const PersonalForm = () => {
 
   const onSelectChange = (e) => {
     setSelectedMedia(e.target.value);
+    if (e.target.value.length < selectedMedia.length) {
+      const removedItem = selectedMedia.filter(
+        (item) => !e.target.value.includes(item)
+      );
+      dispatch(setMedia({ [removedItem]: "" }));
+    }
   };
 
-  // on reload, get state from local storage
+  const parseSelectedMedia = (media) => {
+    return Object.keys(media).filter((item) => {
+      return media[item] !== "";
+    });
+  };
+
   useEffect(() => {
+    if (isSignedIn) {
+      setSelectedMedia(parseSelectedMedia(info.media));
+      return;
+    }
     const serializedState = localStorage.getItem("state");
     if (serializedState === null) return;
     const state = JSON.parse(serializedState);
@@ -44,14 +60,9 @@ export const PersonalForm = () => {
     dispatch(setAbout(state.info.about));
     dispatch(setMedia(state.info.media));
 
-    const selectedMedia = Object.keys(state.info.media).filter((media) => {
-      return state.info.media[media] !== "";
-    });
-
-    setSelectedMedia(selectedMedia);
-
-    console.log(selectedMedia);
-  }, [dispatch]);
+    setSelectedMedia(parseSelectedMedia(state.info.media));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedIn]);
 
   return (
     <Card

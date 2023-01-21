@@ -20,14 +20,28 @@ import * as Yup from "yup";
 import { login } from "../../utils/user-helper";
 import { toast } from "react-toastify";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import { setUser } from "../../state/userSlice";
+import { setProject } from "../../state/projectSlice";
+import { setExperience } from "../../state/experienceSlice";
+import { setEducation } from "../../state/educationSlice";
+import { setInfo } from "../../state/infoSlice";
+
+import { parseUser } from "../../helpers/global-functions";
+import { useEffect } from "react";
 
 export const Login = () => {
+  const navigate = useNavigate();
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
+  useEffect(() => {
+    if (isSignedIn) {
+      navigate("/editor");
+    }
+  }, [isSignedIn, navigate]);
+
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -55,18 +69,12 @@ export const Login = () => {
         if (res.success) {
           toast.success("Login Successful");
           localStorage.setItem("token", res.data.token);
-          dispatch(
-            setUser({
-              isSignedIn: true,
-              email: res.data.user.email,
-              firstName: res.data.user.firstName,
-              lastName: res.data.user.lastName,
-              profilePic: {
-                name: res.data.user.profilePic.name,
-                displayName: res.data.user.profilePic.displayName,
-              },
-            })
-          );
+          const parsedUser = parseUser(res.data.user);
+          dispatch(setUser(parsedUser.user));
+          dispatch(setProject(parsedUser.projects));
+          dispatch(setExperience(parsedUser.experiences));
+          dispatch(setEducation(parsedUser.educations));
+          dispatch(setInfo(parsedUser.info));
           navigate("/editor");
         } else {
           toast.error(res.message);

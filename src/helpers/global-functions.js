@@ -23,3 +23,39 @@ export const formatDescription = (value) => {
   const formattedDescription = formattedLines.join("\n");
   return formattedDescription;
 };
+
+export const parseUser = (user) => {
+  return {
+    user: {
+      isSignedIn: true,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      profilePic: {
+        name: user.profilePic.name,
+        displayName: user.profilePic.displayName,
+      },
+    },
+    projects: user.projects,
+    educations: user.educations,
+    experiences: user.experiences,
+    info: user.info
+      ? user.info
+      : {
+          name: "",
+          email: "",
+          position: "",
+          about: "",
+          media: {
+            github: "",
+            linkedin: "",
+            twitter: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            website: "",
+          },
+        },
+  };
+};

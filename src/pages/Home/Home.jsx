@@ -5,12 +5,17 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export const Home = () => {
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
-  if (user.isSignedIn) navigate("/editor");
+  useEffect(() => {
+    if (user.isSignedIn) {
+      navigate("/editor");
+    }
+  }, [user.isSignedIn, navigate]);
 
   const buttons = [
     {

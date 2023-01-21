@@ -31,15 +31,17 @@ export const ProjectsSection = () => {
 
   return (
     <Box ref={ref}>
-      <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
-        Projects
-      </Typography>
+      {projects.length > 0 && (
+        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+          Projects
+        </Typography>
+      )}
       <Grid container spacing={2}>
         {projects.map((project) => (
           <Grid
             item
             xs={display === "xs" ? 12 : display === "md" ? 6 : 4}
-            key={project.id}
+            key={project._id}
           >
             <Card
               sx={{

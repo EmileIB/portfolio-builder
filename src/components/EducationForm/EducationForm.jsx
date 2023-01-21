@@ -36,6 +36,7 @@ import { formatDescription } from "../../helpers/global-functions";
 
 export const EducationForm = () => {
   const education = useSelector((state) => state.education);
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const dispatch = useDispatch();
   const [parseAccordionItems, setParseAccordionItems] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -57,7 +58,7 @@ export const EducationForm = () => {
     // { title: "Education", subtitle: "School Name" }
     education.forEach((item) => {
       items.push({
-        id: item.id,
+        id: item._id,
         title: item.school,
         content: (
           <Box>
@@ -70,7 +71,7 @@ export const EducationForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editSchool({
-                      id: item.id,
+                      _id: item._id,
                       school: e.target.value,
                     })
                   )
@@ -86,7 +87,7 @@ export const EducationForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editDegree({
-                      id: item.id,
+                      _id: item._id,
                       degree: e.target.value,
                     })
                   )
@@ -107,7 +108,7 @@ export const EducationForm = () => {
                     onChange={(newValue) => {
                       dispatch(
                         editStart({
-                          id: item.id,
+                          _id: item._id,
                           start: stringifyDate(newValue),
                         })
                       );
@@ -126,7 +127,7 @@ export const EducationForm = () => {
                     onChange={(newValue) => {
                       dispatch(
                         editEnd({
-                          id: item.id,
+                          _id: item._id,
                           end: stringifyDate(newValue),
                         })
                       );
@@ -150,7 +151,7 @@ export const EducationForm = () => {
                   );
                   dispatch(
                     editDescription({
-                      id: item.id,
+                      _id: item._id,
                       description: formattedDescription,
                     })
                   );
@@ -162,7 +163,7 @@ export const EducationForm = () => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  dispatch(removeEducation(item.id));
+                  dispatch(removeEducation(item._id));
                   toast.success("Education Deleted");
                 }}
               >
@@ -179,7 +180,7 @@ export const EducationForm = () => {
 
   const addNewEducation = () => {
     const ed = {
-      id: Math.floor(Math.random() * 100000),
+      _id: Math.floor(Math.random() * 100000),
       school: newEducation.school,
       degree: newEducation.degree,
       start: stringifyDate(newEducation.start),
@@ -197,10 +198,12 @@ export const EducationForm = () => {
 
   // on reload, get state from local storage
   useEffect(() => {
+    if (isSignedIn) return;
     const serializedState = JSON.parse(localStorage.getItem("state"));
     if (serializedState === null) return;
     dispatch(setEducation(serializedState.education));
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

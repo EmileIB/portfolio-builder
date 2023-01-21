@@ -10,31 +10,31 @@ const experienceSlice = createSlice({
       state.push(action.payload);
     },
     removeExperience: (state, action) => {
-      return state.filter((experience) => experience.id !== action.payload);
+      return state.filter((experience) => experience._id !== action.payload);
     },
     editCompany: (state, action) => {
-      const { id, company } = action.payload;
-      const index = state.findIndex((experience) => experience.id === id);
+      const { _id, company } = action.payload;
+      const index = state.findIndex((experience) => experience._id === _id);
       state[index].company = company;
     },
     editPosition: (state, action) => {
-      const { id, position } = action.payload;
-      const index = state.findIndex((experience) => experience.id === id);
+      const { _id, position } = action.payload;
+      const index = state.findIndex((experience) => experience._id === _id);
       state[index].position = position;
     },
     editStart: (state, action) => {
-      const { id, start } = action.payload;
-      const index = state.findIndex((experience) => experience.id === id);
+      const { _id, start } = action.payload;
+      const index = state.findIndex((experience) => experience._id === _id);
       state[index].start = start;
     },
     editEnd: (state, action) => {
-      const { id, end } = action.payload;
-      const index = state.findIndex((experience) => experience.id === id);
+      const { _id, end } = action.payload;
+      const index = state.findIndex((experience) => experience._id === _id);
       state[index].end = end;
     },
     editDescription: (state, action) => {
-      const { id, description } = action.payload;
-      const index = state.findIndex((experience) => experience.id === id);
+      const { _id, description } = action.payload;
+      const index = state.findIndex((experience) => experience._id === _id);
       state[index].description = description;
     },
     setExperience: (state, action) => {

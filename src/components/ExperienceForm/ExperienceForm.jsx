@@ -36,6 +36,7 @@ import { formatDescription } from "../../helpers/global-functions";
 
 export const ExperienceForm = () => {
   const experience = useSelector((state) => state.experience);
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const dispatch = useDispatch();
   const [parseAccordionItems, setParseAccordionItems] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -55,7 +56,7 @@ export const ExperienceForm = () => {
     const items = [];
     experience.forEach((item) => {
       items.push({
-        id: item.id,
+        id: item._id,
         title: item.company,
         content: (
           <Box>
@@ -68,7 +69,7 @@ export const ExperienceForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editCompany({
-                      id: item.id,
+                      _id: item._id,
                       company: e.target.value,
                     })
                   )
@@ -84,7 +85,7 @@ export const ExperienceForm = () => {
                 onChange={(e) =>
                   dispatch(
                     editPosition({
-                      id: item.id,
+                      _id: item._id,
                       position: e.target.value,
                     })
                   )
@@ -105,7 +106,7 @@ export const ExperienceForm = () => {
                     onChange={(newValue) => {
                       dispatch(
                         editStart({
-                          id: item.id,
+                          _id: item._id,
                           start: stringifyDate(newValue),
                         })
                       );
@@ -124,7 +125,7 @@ export const ExperienceForm = () => {
                     onChange={(newValue) => {
                       dispatch(
                         editEnd({
-                          id: item.id,
+                          _id: item._id,
                           end: stringifyDate(newValue),
                         })
                       );
@@ -148,7 +149,7 @@ export const ExperienceForm = () => {
                   );
                   dispatch(
                     editDescription({
-                      id: item.id,
+                      _id: item._id,
                       description: formattedDescription,
                     })
                   );
@@ -160,7 +161,7 @@ export const ExperienceForm = () => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  dispatch(removeExperience(item.id));
+                  dispatch(removeExperience(item._id));
                   toast.success("Experience Deleted");
                 }}
               >
@@ -177,7 +178,7 @@ export const ExperienceForm = () => {
 
   const addNewExperience = () => {
     const ex = {
-      id: Math.floor(Math.random() * 100000),
+      _id: Math.floor(Math.random() * 100000),
       company: newExperience.company,
       position: newExperience.position,
       start: stringifyDate(newExperience.start),
@@ -195,10 +196,12 @@ export const ExperienceForm = () => {
 
   // on reload, get state from local storage
   useEffect(() => {
+    if (isSignedIn) return;
     const serializedState = JSON.parse(localStorage.getItem("state"));
     if (serializedState === null) return;
     dispatch(setExperience(serializedState.experience));
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

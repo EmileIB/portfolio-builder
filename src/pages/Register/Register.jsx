@@ -23,7 +23,14 @@ import { toast } from "react-toastify";
 import { register } from "../../utils/user-helper";
 
 import { useDispatch } from "react-redux";
+
 import { setUser } from "../../state/userSlice";
+import { setProject } from "../../state/projectSlice";
+import { setExperience } from "../../state/experienceSlice";
+import { setEducation } from "../../state/educationSlice";
+import { setInfo } from "../../state/infoSlice";
+
+import { parseUser } from "../../helpers/global-functions";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -81,19 +88,12 @@ export const Register = () => {
           toast.success("Registration Successful");
           formik.resetForm();
           localStorage.setItem("token", res.data.token);
-          dispatch(
-            setUser({
-              isSignedIn: true,
-              firstName: res.data.user.firstName,
-              lastName: res.data.user.lastName,
-              email: res.data.user.email,
-              phone: res.data.user.phone,
-              profilePic: {
-                name: res.data.user.profilePic?.name,
-                displayName: res.data.user.profilePic?.displayName,
-              },
-            })
-          );
+          const parsedUser = parseUser(res.data.user);
+          dispatch(setUser(parsedUser.user));
+          dispatch(setProject(parsedUser.projects));
+          dispatch(setExperience(parsedUser.experiences));
+          dispatch(setEducation(parsedUser.educations));
+          dispatch(setInfo(parsedUser.info));
           navigate("/editor");
         } else {
           toast.error("Error Registering User! Please try again later.");

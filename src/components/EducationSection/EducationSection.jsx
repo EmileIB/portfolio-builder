@@ -58,12 +58,14 @@ export const EducationSection = () => {
 
   return (
     <Box>
-      <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
-        Education
-      </Typography>
+      {education.length > 0 && (
+        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+          Education
+        </Typography>
+      )}
       {education.map((item) => (
         <div
-          key={item.id}
+          key={item._id}
           style={{
             marginBottom: "1rem",
           }}

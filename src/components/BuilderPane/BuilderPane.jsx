@@ -47,7 +47,7 @@ export const BuilderPane = () => {
               fontWeight: "bold",
             }}
           >
-            Upload Resume
+            Deploy Portfolio
           </Button>
         </div>
       </Container>

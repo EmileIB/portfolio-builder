@@ -17,11 +17,25 @@ import { useCallback } from "react";
 
 import { toast } from "react-toastify";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSignedIn } from "../../state/userSlice";
+
+import { addUpdateInfo } from "../../utils/info-helper";
+import { addUpdateEducations } from "../../utils/education-helper";
+import { addUpdateExperiences } from "../../utils/experience-helper";
+import { addUpdateProjects } from "../../utils/project-helper";
+
+import { setLoading } from "../../state/globalSlice";
+import { setInfo } from "../../state/infoSlice";
+import { setExperience } from "../../state/experienceSlice";
+import { setEducation } from "../../state/educationSlice";
+import { setProject } from "../../state/projectSlice";
 
 const settings = ["Profile", "Logout"];
 
 export const MainAppBar = () => {
+  const dispatch = useDispatch();
+  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -49,6 +63,7 @@ export const MainAppBar = () => {
         break;
       case "Logout":
         localStorage.removeItem("token");
+        dispatch(setSignedIn(false));
         navigate("/");
         break;
       default:
@@ -61,10 +76,31 @@ export const MainAppBar = () => {
   const user = useSelector((state) => state.user);
 
   const handleSave = useCallback(() => {
-    localStorage.setItem("state", JSON.stringify(state));
-    toast.success("Your changes have been saved!");
+    if (isSignedIn) {
+      dispatch(setLoading(true));
+      Promise.all([
+        addUpdateInfo(state.info).then((res) => {
+          dispatch(setInfo(res.data));
+        }),
+        addUpdateExperiences(state.experience).then((res) => {
+          dispatch(setExperience(res.data));
+        }),
+        addUpdateEducations(state.education).then((res) => {
+          dispatch(setEducation(res.data));
+        }),
+        addUpdateProjects(state.projects).then((res) => {
+          dispatch(setProject(res.data));
+        }),
+      ]).then(() => {
+        dispatch(setLoading(false));
+        toast.success("Your changes have been saved!");
+      });
+    } else {
+      localStorage.setItem("state", JSON.stringify(state));
+      toast.success("Your changes have been saved!");
+    }
     handleCloseUserMenu();
-  }, [state]);
+  }, [state, isSignedIn, dispatch]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -200,7 +236,17 @@ export const MainAppBar = () => {
               {user.isSignedIn ? (
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={"Emile Ibrahim"}>E</Avatar>
+                    <Avatar
+                      alt={user.firstName + " " + user.lastName}
+                      src={
+                        user.profilePic.name
+                          ? "http://localhost:8080/images/" +
+                            user.profilePic.name
+                          : ""
+                      }
+                    >
+                      {user.firstName.charAt(0) + user.lastName.charAt(0)}
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
               ) : (

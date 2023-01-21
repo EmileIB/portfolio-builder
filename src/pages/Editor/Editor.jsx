@@ -28,7 +28,7 @@ export const Editor = () => {
   return (
     <div ref={ref}>
       <MainAppBar />
-      {user.isSignedIn && user.isLoading ? (
+      {user.isLoading ? (
         <Box
           sx={{
             display: "flex",

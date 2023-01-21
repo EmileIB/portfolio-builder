@@ -58,12 +58,14 @@ export const ExperienceSection = () => {
 
   return (
     <Box>
-      <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
-        Experience
-      </Typography>
+      {experience.length > 0 && (
+        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+          Experience
+        </Typography>
+      )}
       {experience.map((item) => (
         <div
-          key={item.id}
+          key={item._id}
           style={{
             marginBottom: "1rem",
           }}
