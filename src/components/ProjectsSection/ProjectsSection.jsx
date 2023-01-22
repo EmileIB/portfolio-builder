@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import { useSelector } from "react-redux";
-
 import {
   Box,
   Typography,
@@ -13,9 +11,7 @@ import {
 
 import { useResizeDetector } from "react-resize-detector";
 
-export const ProjectsSection = () => {
-  const projects = useSelector((state) => state.projects);
-
+export const ProjectsSection = ({ projects, innerRef }) => {
   const { width, ref } = useResizeDetector();
   const [display, setDisplay] = useState("none");
 
@@ -32,7 +28,11 @@ export const ProjectsSection = () => {
   return (
     <Box ref={ref}>
       {projects.length > 0 && (
-        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+        <Typography
+          variant="h3"
+          sx={{ fontFamily: "century gothic", mb: 2 }}
+          ref={innerRef}
+        >
           Projects
         </Typography>
       )}

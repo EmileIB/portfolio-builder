@@ -4,7 +4,8 @@ import { EducationForm } from "../EducationForm";
 import { ExperienceForm } from "../ExperienceForm";
 import { ProjectsForm } from "../ProjectsForm";
 
-export const BuilderPane = () => {
+
+export const BuilderPane = ({ handleDeploy }) => {
   const Divider = () => {
     return (
       <div
@@ -46,6 +47,7 @@ export const BuilderPane = () => {
               width: "50%",
               fontWeight: "bold",
             }}
+            onClick={handleDeploy}
           >
             Deploy Portfolio
           </Button>

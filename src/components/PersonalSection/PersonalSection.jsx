@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-
 import { Box, Typography, IconButton } from "@mui/material";
 
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -9,10 +7,9 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LanguageIcon from "@mui/icons-material/Language";
+import EmailIcon from "@mui/icons-material/Email";
 
-export const PersonalSection = () => {
-  const info = useSelector((state) => state.info);
-
+export const PersonalSection = ({ info, innerRef }) => {
   const mediaLogos = {
     github: <GitHubIcon />,
     linkedin: <LinkedInIcon />,
@@ -45,9 +42,26 @@ export const PersonalSection = () => {
   return (
     <Box>
       <Box xs={{ mb: 2 }}>
-        <Typography variant="h3" sx={{ fontFamily: "century gothic" }}>
+        <Typography
+          variant="h3"
+          sx={{ fontFamily: "century gothic" }}
+          ref={innerRef}
+        >
           {info.position}
         </Typography>
+        {info.email && (
+          <IconButton
+            href={`mailto:${info.email}`}
+            sx={{
+              color: "white",
+              "&:hover": {
+                color: "white",
+              },
+            }}
+          >
+            <EmailIcon />
+          </IconButton>
+        )}
         {Object.keys(info.media).map(
           (media) => info.media[media] && mediButton(media)
         )}

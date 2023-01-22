@@ -1,12 +1,8 @@
-import { useSelector } from "react-redux";
-
 import { Box, Typography } from "@mui/material";
 
 import { formatDate } from "../../helpers/global-functions";
 
-export const EducationSection = () => {
-  const education = useSelector((state) => state.education);
-
+export const EducationSection = ({ education, innerRef }) => {
   const EducationItem = ({ item }) => {
     return (
       <Box>
@@ -59,7 +55,11 @@ export const EducationSection = () => {
   return (
     <Box>
       {education.length > 0 && (
-        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+        <Typography
+          variant="h3"
+          sx={{ fontFamily: "century gothic", mb: 2 }}
+          ref={innerRef}
+        >
           Education
         </Typography>
       )}

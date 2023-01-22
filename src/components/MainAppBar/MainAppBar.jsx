@@ -13,29 +13,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { useCallback } from "react";
-
-import { toast } from "react-toastify";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setSignedIn } from "../../state/userSlice";
 
-import { addUpdateInfo } from "../../utils/info-helper";
-import { addUpdateEducations } from "../../utils/education-helper";
-import { addUpdateExperiences } from "../../utils/experience-helper";
-import { addUpdateProjects } from "../../utils/project-helper";
-
-import { setLoading } from "../../state/globalSlice";
-import { setInfo } from "../../state/infoSlice";
-import { setExperience } from "../../state/experienceSlice";
-import { setEducation } from "../../state/educationSlice";
-import { setProject } from "../../state/projectSlice";
-
-const settings = ["Profile", "Logout"];
-
-export const MainAppBar = () => {
+export const MainAppBar = ({ handleSave }) => {
   const dispatch = useDispatch();
-  const isSignedIn = useSelector((state) => state.user.isSignedIn);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -56,51 +39,7 @@ export const MainAppBar = () => {
     setAnchorElUser(null);
   };
 
-  const handleSettingClick = (event) => {
-    switch (event.target.innerText) {
-      case "Profile":
-        navigate("/profile");
-        break;
-      case "Logout":
-        localStorage.removeItem("token");
-        dispatch(setSignedIn(false));
-        navigate("/");
-        break;
-      default:
-        break;
-    }
-    handleCloseUserMenu();
-  };
-
-  const state = useSelector((state) => state);
   const user = useSelector((state) => state.user);
-
-  const handleSave = useCallback(() => {
-    if (isSignedIn) {
-      dispatch(setLoading(true));
-      Promise.all([
-        addUpdateInfo(state.info).then((res) => {
-          dispatch(setInfo(res.data));
-        }),
-        addUpdateExperiences(state.experience).then((res) => {
-          dispatch(setExperience(res.data));
-        }),
-        addUpdateEducations(state.education).then((res) => {
-          dispatch(setEducation(res.data));
-        }),
-        addUpdateProjects(state.projects).then((res) => {
-          dispatch(setProject(res.data));
-        }),
-      ]).then(() => {
-        dispatch(setLoading(false));
-        toast.success("Your changes have been saved!");
-      });
-    } else {
-      localStorage.setItem("state", JSON.stringify(state));
-      toast.success("Your changes have been saved!");
-    }
-    handleCloseUserMenu();
-  }, [state, isSignedIn, dispatch]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -183,7 +122,13 @@ export const MainAppBar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                <MenuItem key={"Save Changes"} onClick={handleSave}>
+                <MenuItem
+                  key={"Save Changes"}
+                  onClick={() => {
+                    handleSave();
+                    handleCloseNavMenu();
+                  }}
+                >
                   <Typography textAlign="center">Save Changes</Typography>
                 </MenuItem>
               </Menu>
@@ -280,11 +225,19 @@ export const MainAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleSettingClick}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem key="profile" onClick={() => navigate("/profile")}>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem
+                  key="logout"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    dispatch(setSignedIn(false));
+                    navigate("/");
+                  }}
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

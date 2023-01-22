@@ -1,12 +1,8 @@
-import { useSelector } from "react-redux";
-
 import { Box, Typography } from "@mui/material";
 
 import { formatDate } from "../../helpers/global-functions";
 
-export const ExperienceSection = () => {
-  const experience = useSelector((state) => state.experience);
-
+export const ExperienceSection = ({ experience, innerRef }) => {
   const ExperienceItem = ({ item }) => {
     return (
       <Box>
@@ -59,7 +55,11 @@ export const ExperienceSection = () => {
   return (
     <Box>
       {experience.length > 0 && (
-        <Typography variant="h3" sx={{ fontFamily: "century gothic", mb: 2 }}>
+        <Typography
+          variant="h3"
+          sx={{ fontFamily: "century gothic", mb: 2 }}
+          ref={innerRef}
+        >
           Experience
         </Typography>
       )}

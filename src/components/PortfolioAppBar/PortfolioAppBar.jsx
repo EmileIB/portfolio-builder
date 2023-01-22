@@ -9,20 +9,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { useResizeDetector } from "react-resize-detector";
 
-const pages = ["About Me", "Education", "Work Experience", "Projects"];
-
-export const PortfolioAppBar = () => {
+export const PortfolioAppBar = ({ scrollTo, pages, name }) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { width, ref } = useResizeDetector();
-
-  const name = useSelector((state) => state.info.name);
 
   useEffect(() => {
     width >= 900 ? setIsExpanded(true) : setIsExpanded(false);
@@ -32,8 +27,13 @@ export const PortfolioAppBar = () => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = async () => {
     setAnchorElNav(null);
+  };
+
+  const scrollToSection = async (section) => {
+    await handleCloseNavMenu();
+    scrollTo(section);
   };
 
   return (
@@ -95,8 +95,11 @@ export const PortfolioAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.name}
+                  onClick={() => scrollToSection(page.scrollTo)}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -132,8 +135,8 @@ export const PortfolioAppBar = () => {
           >
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.name}
+                onClick={() => scrollToSection(page.scrollTo)}
                 sx={{
                   my: 2,
                   color: "white",
@@ -143,7 +146,7 @@ export const PortfolioAppBar = () => {
                   fontFamily: "monospace",
                 }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>

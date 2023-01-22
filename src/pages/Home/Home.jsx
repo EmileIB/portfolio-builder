@@ -51,7 +51,7 @@ export const Home = () => {
               Welcome to <strong>PGEN!</strong>
             </Typography>
             <Typography variant="h5" align="center">
-              Your ultimate portfolio generator.
+              Your ultimate <strong>portfolio generator</strong>.
             </Typography>
 
             <Box

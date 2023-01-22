@@ -2,6 +2,7 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Editor } from "./pages/Editor";
 import { Register } from "./pages/Register";
+import { Portfolio } from "./pages/Portfolio";
 
 export const routes = [
   {
@@ -23,5 +24,10 @@ export const routes = [
     path: "/register",
     exact: true,
     component: <Register />,
+  },
+  {
+    path: "/portfolio/:id",
+    exact: true,
+    component: <Portfolio />,
   },
 ];
