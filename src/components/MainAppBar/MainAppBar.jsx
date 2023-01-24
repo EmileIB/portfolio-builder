@@ -225,9 +225,6 @@ export const MainAppBar = ({ handleSave }) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <MenuItem key="profile" onClick={() => navigate("/profile")}>
-                  <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
                 <MenuItem
                   key="logout"
                   onClick={() => {
